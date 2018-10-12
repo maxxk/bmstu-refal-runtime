@@ -76,7 +76,8 @@ void mainLoop(const char* entryFuncName, RefalFunc entryFuncPointer)
                 _currCallTerm->funcCall->parentCall = parentCall;
                 break;
             case FAIL_RESULT:
-                _currCallTerm = onFuncFail(_currCallTerm, 1);
+                _currCallTerm = onFuncFail(_currCallTerm, 0);
+                entryStatus = ROLL_BACK;
                 break;
         }
 
@@ -90,6 +91,7 @@ static struct lterm_t* onFuncFail(struct lterm_t* callTerm, int failResult)
     if ((failResult && !callTerm->funcCall->rollback) || !callTerm->funcCall->parentCall || callTerm->funcCall->failEntryPoint == -1)
     {
         printf(FUNC_CALL_FAILED);
+        printf("%d\n", callTerm->funcCall->failEntryPoint);
         printf("Func call term:\n");
         printFuncCallLn(stdout, callTerm->funcCall);
         printf("Field of view:\n");
